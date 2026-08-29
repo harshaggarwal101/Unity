@@ -2,7 +2,7 @@
 
 ## Description
 
-A Unity exercise where a cube changes its color and rotation randomly at random intervals.
+A Unity exercise where a cube changes its **color** and **rotation** and **size** randomly at random intervals.
 
 ## Topics Learned
 
