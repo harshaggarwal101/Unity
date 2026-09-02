@@ -11,13 +11,18 @@ public class PlayerController : MonoBehaviour
 
     private bool isOnGround = true;
     public bool gameOver = false;
+    public ParticleSystem explosionParticles;
+    public ParticleSystem dirtParticles;
+    
+    private Animator playerAnimator;
 
     void Start()
     {
         Physics.gravity *= magnitude;
 
         playerRb = GetComponent<Rigidbody>();
-
+        playerAnimator = GetComponent<Animator>();
+        
         jumpAction.Enable();
     }
 
@@ -28,13 +33,16 @@ public class PlayerController : MonoBehaviour
         //     Debug.Log("SPACE PRESSED | isOnGround = " + isOnGround);
         // }
 
-        if (jumpAction.triggered && isOnGround)
+        if (jumpAction.triggered && isOnGround && !gameOver)
         {
             // Debug.Log("JUMPING");
 
             playerRb.AddForce(Vector3.up * jumforce, ForceMode.Impulse);
 
             isOnGround = false;
+            dirtParticles.Stop();
+
+            playerAnimator.SetTrigger("Jump_trig");
 
             // Debug.Log("After jump | isOnGround = " + isOnGround);
         }
@@ -44,17 +52,21 @@ public class PlayerController : MonoBehaviour
     {
         // Debug.Log("Collision with: " + collision.gameObject.name);
 
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") && !gameOver)
         {
             isOnGround = true;
+            dirtParticles.Play();
 
             // Debug.Log("LANDED | isOnGround = " + isOnGround);
         }
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Game Over");
-
+            playerAnimator.SetBool("Death_b", true);
+            playerAnimator.SetInteger("DeathType_int",1);
+            explosionParticles.Play();
             gameOver = true;
+            dirtParticles.Stop();
         }
     }
 }

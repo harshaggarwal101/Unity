@@ -14,12 +14,12 @@ public class MoveLeft : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerControllerScript.gameOver == false)
+        if (!playerControllerScript.gameOver)
         {
-            transform.Translate(Vector3.left * Time.deltaTime*speed);
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
         }
 
-        if (gameObject.tag == "Obstacle" && transform.position.x<=0)
+        if (CompareTag("Obstacle") && transform.position.x <= 0)
         {
             Destroy(gameObject);
         }
